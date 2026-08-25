@@ -67,6 +67,12 @@ export default function ResourceForm({ auth }: ResourceFormProps) {
     e.preventDefault();
     setError(null);
 
+    const isValidUrl = validateUrl(url);
+
+    if (!isValidUrl) {
+      return;
+    }
+
     // NOTE: no loading state here yet while the request is in flight -
     // see the "add a loading state to the resource form" issue.
     const tags = tagsInput
@@ -145,6 +151,14 @@ export default function ResourceForm({ auth }: ResourceFormProps) {
     } finally {
       setIsConfirming(false);
     }
+  }
+
+  function validateUrl(url: string): boolean {
+    if (!/^https?:\/\/.*\./.test(url)) {
+      setError("Invalid url. Please provide a valid link.");
+      return false;
+    }
+    return true;
   }
 
   return (
